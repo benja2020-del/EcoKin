@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>EcoKin | Portail Collaboratif</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#001a42",
+                    "primary-container": "#10b981",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "surface": "#f9f9ff",
+                    "on-primary-fixed": "#002113",
+                    "inverse-surface": "#2a313d",
+                    "outline": "#6c7a71",
+                    "on-error-container": "#93000a",
+                    "secondary-container": "#2170e4",
+                    "tertiary-fixed": "#ffddb8",
+                    "error-container": "#ffdad6",
+                    "secondary": "#0058be",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed": "#d8e2ff",
+                    "on-background": "#151c27",
+                    "surface-bright": "#f9f9ff",
+                    "surface-container": "#e7eefe",
+                    "inverse-on-surface": "#ebf1ff",
+                    "surface-variant": "#dce2f3",
+                    "surface-dim": "#d3daea",
+                    "primary": "#006c49",
+                    "on-primary-fixed-variant": "#005236",
+                    "inverse-primary": "#4edea3",
+                    "on-surface-variant": "#3c4a42",
+                    "on-primary-container": "#00422b",
+                    "outline-variant": "#bbcabf",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "on-secondary-container": "#fefcff",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-primary": "#ffffff",
+                    "tertiary-container": "#e29100",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-surface": "#151c27",
+                    "background": "#f9f9ff",
+                    "surface-tint": "#006c49",
+                    "surface-container-highest": "#dce2f3",
+                    "primary-fixed": "#6ffbbe",
+                    "surface-container-high": "#e2e8f8",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#855300",
+                    "on-secondary-fixed-variant": "#004395",
+                    "on-tertiary-container": "#523200",
+                    "surface-container-low": "#f0f3ff",
+                    "primary-fixed-dim": "#4edea3",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "gutter-mobile": "12px",
+                    "lg": "24px",
+                    "md": "16px",
+                    "base": "4px",
+                    "xl": "32px",
+                    "sm": "8px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "button": ["Inter"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "button": ["15px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        body {
+            background-color: #f9f9ff;
+            color: #151c27;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #bbcabf;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface/80 backdrop-blur-md text-primary font-headline-md text-headline-md font-bold flex items-center gap-2 docked full-width top-0 sticky z-50 shadow-sm justify-between px-margin-mobile py-sm w-full">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style='font-variation-settings: "FILL" 1;'>eco</span>
+<span class="font-headline-md text-headline-md font-bold tracking-tight"><span style="background-color: rgb(249, 249, 255);">EcoKin</span></span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-container-high/50 transition-colors rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<div class="hidden md:flex gap-6 items-center ml-4">
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-primary transition-colors" href="../carte_des_signalements/code.html">Carte</a>
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-primary transition-colors" href="../gestion_des_d_chets/code.html">Déchets</a>
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-primary transition-colors" href="../espace_ducation/code.html">Apprendre</a>
+<a class="text-primary font-bold font-label-sm text-label-sm" href="../portail_collaboratif/code.html">Portail</a>
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-primary transition-colors" href="../compte/code.html">Compte</a>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-margin-mobile md:px-lg py-md space-y-lg">
+<!-- Hero Section -->
+<section class="relative rounded-xl overflow-hidden min-h-[300px] flex items-end p-lg">
+<div class="absolute inset-0 z-0">
+<img alt="Bénévoles communautaires souriants travaillant ensemble dans un parc urbain ensoleillé" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIS8A3es9GX614jJMVS_ozqrSedYMv7GovfSIcFjdbpc3hb39tO1Lr-rPRsUxGgL1tzVTGYxgunTVPxJoboiHIej6VrARqfd5k_jAWVKofJgpgHXeEHD6DdxibKwmAZLgmdqif8CUEmtaUpjp_Ql27ioBGXge0iQ-pkMwQAdpS9fLoEei6vvU2AbvvVyelAlED0msUGZBPaJMOOpf-OEtY7gfHJ4nqZ79ZSQ1Pk2IFrmXwIUhNT7s"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+</div>
+<div class="relative z-10 text-white max-w-2xl">
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-sm">Collaborez pour un avenir plus propre</h1>
+<p class="font-body-lg text-body-lg text-white/90 mb-md">Rejoignez les événements locaux, partagez des idées de projets innovants et restez informé des actualités environnementales de votre quartier.</p>
+<div class="flex gap-sm">
+<button class="bg-primary-container text-on-primary-container font-button text-button px-lg py-md rounded-full shadow-lg hover:scale-105 transition-transform">
+                        Explorer les événements
+                    </button>
+<button class="bg-white/20 backdrop-blur-md text-white font-button text-button px-lg py-md rounded-full hover:bg-white/30 transition-colors">
+                        Publier une idée
+                    </button>
+</div>
+</div>
+</section>
+<!-- Main Portal Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- Community Cleaning Events (Left Column) -->
+<div class="lg:col-span-8 space-y-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">event</span>
+<h2 class="font-headline-md text-headline-md">Événements communautaires</h2>
+</div>
+<button class="text-primary font-label-sm text-label-sm flex items-center gap-1 hover:underline">
+                        Tout voir <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Event Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
+<div class="h-40 relative overflow-hidden">
+<img alt="Mains plantant un jeune arbre dans un sol sombre et riche" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKiJKwOcNqoo-E72jLEjv9mhM_qjBLjYVWaBZSM_wfEnLaDfjpWZ8T8wyq4014GJwiC9N3RgDBrmDOEm6hXGaPk0QiAlanvJLNne_6xylRU1oT5KJ9SizxKDX2hik059A-TKsyqw0Pmf2Jv30alE2aakZGDlAmraWYhrXVwhuHk7aL6yvr2xAvSvf1FBbrUlnL27HubjjnywkjjtKluAYGPCG0zfUmkkij87UV2st2B-28SEuTTzg"/>
+<div class="absolute top-sm left-sm bg-white/90 backdrop-blur px-sm py-xs rounded-lg text-center shadow-sm">
+<span class="block font-bold text-primary">24</span>
+<span class="block text-[10px] uppercase tracking-wider text-on-surface-variant font-bold">Oct</span>
+</div>
+</div>
+<div class="p-md space-y-sm">
+<span class="inline-block bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm px-2 py-0.5 rounded-full">Nettoyage de Berge</span>
+<h3 class="font-headline-md text-headline-md">Restauration de la Rive Nord</h3>
+<p class="text-on-surface-variant font-body-md text-body-md line-clamp-2">Rejoignez vos voisins pour notre nettoyage mensuel de la berge. Matériel et rafraîchissements fournis.</p>
+<div class="flex items-center justify-between pt-sm">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-white bg-secondary-fixed flex items-center justify-center overflow-hidden">
+<img alt="Portrait d'une bénévole" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq97sez9GNVZ-3OPgSz6uZcBC7_ZApHSnXnb9tQeIcufpt_Na3Gc7MCtqE1e5uHcxAysGf4VNn3zHKfNnvbYEGyVr9cXLuEzf6bGlXh2E0kqXuUCPrggSzNnf6INbR-uHc2D6W5TT67NYS4zuqJoX-veDNAp_7bAIx28opnc5Cn8B3g8NbGO40x3b5Dm55SSPh8ED9JGQrLr3Eb-iVvhk7KjMmPfqUsQvo_0EbstAxKlvcw-uRx3w"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-tertiary-fixed flex items-center justify-center overflow-hidden">
+<img alt="Portrait d'un bénévole" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWy-UVa5tKrEGpEwpSXc2zaygvqijDsd4xLK8j92BXEnruSskV8gw01tSYHmqQZbjsL9Gnpa7dWWitThBe48PJ-VDzK6eDaUFifQRyMsDfGilmoZ9NKPd0p8mjX--G5PeAqvEMclQ4TM3oRjkj0bNr6yEundQ7YEBsOzOOVWdulW5gCtidzDCKBEgjSSCeZsdQ0D56o89KGP71B1oMU5jm5RcWgHLpLVou1g2zhx7x5VpgH13G1ks"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-surface-container-high flex items-center justify-center">
+<span class="text-[10px] font-bold">+12</span>
+</div>
+</div>
+<button class="bg-primary text-white font-button text-button px-md py-sm rounded-lg hover:bg-on-primary-fixed-variant transition-colors flex items-center gap-2 group/btn">
+                                    Rejoindre <span class="material-symbols-outlined text-sm group-hover/btn:translate-x-1 transition-transform">send</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Event Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
+<div class="h-40 relative overflow-hidden">
+<img alt="Un parc urbain moderne avec des stations de recharge solaires" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiROQEuiIQoDM9kb_rlok6_n3xdmBdw8-j7OsaXjAmM0ghmOFKMcHLqTIxzAq4BYbX-PNctdcwO6qlIFAL4mz3OvYWcCsI8oDnD_IRTRl-eISxdl8CDC8HoLhifHCMLIE8cax_2NUqrzJYOzBIuyfdhqH2wCjB9fCyS-EBPI9jkQRtmVuq0XmYyqxPLhI7ZCxd_4YVnH0bTV3HCJ8EOhMZmug_ZQvpvOJyrQ4V7OBIOzNW0ERJwzA"/>
+<div class="absolute top-sm left-sm bg-white/90 backdrop-blur px-sm py-xs rounded-lg text-center shadow-sm">
+<span class="block font-bold text-primary">28</span>
+<span class="block text-[10px] uppercase tracking-wider text-on-surface-variant font-bold">Oct</span>
+</div>
+</div>
+<div class="p-md space-y-sm">
+<span class="inline-block bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-label-sm px-2 py-0.5 rounded-full">Jardin Communautaire</span>
+<h3 class="font-headline-md text-headline-md">Atelier Jardin Vertical</h3>
+<p class="text-on-surface-variant font-body-md text-body-md line-clamp-2">Apprenez à construire des jardins verticaux durables pour les petits balcons et espaces urbains.</p>
+<div class="flex items-center justify-between pt-sm">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-white bg-tertiary-fixed-dim flex items-center justify-center overflow-hidden">
+<img alt="Portrait d'une animatrice d'atelier" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDW9b0d5z0ohVwJJ3-4ZSU57Kprx9ixwlIUHqWed94LB_Et8xCDdavA3pZo2ANLeL1DejnoxrZNTAayln2fGdCGXCvZouawDUhF-nSVQNvxfmBIWLSlL3TKkXtluVgPf2pSBeTYzzYQnDLQ5Dirtf5tCUnEX4ATOKc7IFz2zS1b5ToL4vYO7zNIjRMUnceXVKDAe_IYDhlxTqsnKsKTcOXfJc9rcWj3wc42IcFqCYBldh3m5RZT6o"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-surface-container-high flex items-center justify-center">
+<span class="text-[10px] font-bold">+45</span>
+</div>
+</div>
+<button class="bg-primary text-white font-button text-button px-md py-sm rounded-lg hover:bg-on-primary-fixed-variant transition-colors flex items-center gap-2 group/btn">
+                                    Rejoindre <span class="material-symbols-outlined text-sm group-hover/btn:translate-x-1 transition-transform">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Forum/Ideas Section -->
+<div class="pt-lg">
+<div class="flex items-center justify-between mb-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">forum</span>
+<h2 class="font-headline-md text-headline-md">Idées de projets</h2>
+</div>
+<div class="flex gap-sm">
+<button class="font-label-sm text-label-sm px-md py-sm rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-variant">Récents</button>
+<button class="font-label-sm text-label-sm px-md py-sm rounded-full bg-primary-container text-on-primary-container">Populaires</button>
+</div>
+</div>
+<div class="space-y-md">
+<!-- Idea Card 1 -->
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-sm border border-transparent hover:border-outline-variant transition-all flex gap-md">
+<div class="flex flex-col items-center justify-center bg-surface-container px-sm py-md rounded-lg min-w-[64px]">
+<button class="text-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined fill-icon">arrow_drop_up</span>
+</button>
+<span class="font-headline-md text-headline-md text-primary">128</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Votes</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-sm text-label-sm text-primary">Réduction des déchets</span>
+<span class="text-outline-variant">•</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Il y a 2h par @EcoWarrior</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2">Bacs intelligents pour le plastique</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">Nous devrions installer des bacs intelligents connectés qui offrent des points de fidélité pour le recyclage des bouteilles. Cela pourrait s'intégrer aux commerces locaux.</p>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm hover:text-primary">
+<span class="material-symbols-outlined text-base">chat_bubble</span> 24 Commentaires
+                                    </button>
+<button class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm hover:text-primary">
+<span class="material-symbols-outlined text-base">share</span> Partager
+                                    </button>
+</div>
+</div>
+</div>
+<!-- Idea Card 2 -->
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-sm border border-transparent hover:border-outline-variant transition-all flex gap-md">
+<div class="flex flex-col items-center justify-center bg-surface-container px-sm py-md rounded-lg min-w-[64px]">
+<button class="text-on-surface-variant hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">arrow_drop_up</span>
+</button>
+<span class="font-headline-md text-headline-md text-on-surface-variant">84</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Votes</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-sm text-label-sm text-primary">Énergie</span>
+<span class="text-outline-variant">•</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Il y a 5h par @SunSeeker</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2">Lampadaires à panneaux solaires</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">Remplacer l'éclairage public du parc par des unités solaires autonomes permettrait d'économiser sur les coûts d'énergie et de réduire l'empreinte carbone.</p>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm hover:text-primary">
+<span class="material-symbols-outlined text-base">chat_bubble</span> 12 Commentaires
+                                    </button>
+<button class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm hover:text-primary">
+<span class="material-symbols-outlined text-base">share</span> Partager
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- News & Updates (Right Column) -->
+<aside class="lg:col-span-4 space-y-lg">
+<div class="bg-surface-container-low p-lg rounded-xl space-y-md border border-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">newspaper</span>
+<h2 class="font-headline-md text-headline-md">Nouvelles environnementales</h2>
+</div>
+<div class="space-y-md">
+<!-- News Item 1 -->
+<div class="group cursor-pointer">
+<div class="flex gap-md">
+<div class="w-20 h-20 rounded-lg overflow-hidden shrink-0">
+<img alt="Ferme solaire moderne" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBStTv7lILsj5ZxJENXa4w7f7xbVYo1_zNazJ_jqy26zB5M8vsqlHeXUCiIWZQOhQz84g7RNgahWaPGn8yctIkephl4n94WVvt5RJ3p8ruxO9WWjZ0NTHEzkxPcupUmZ5dDMHxlj5BlkmeNhdaWT18AWGaIhrIUDS0JadzPK3zN-99N8yUQqtwhN-RepyoMzEdt6Vu7HBzZYW2uY0D-kU7OMSsQ2XJ9z6LrakA3TmW-TB1Lgn_j0qk"/>
+</div>
+<div class="space-y-1">
+<h4 class="font-body-lg text-body-lg font-bold group-hover:text-primary transition-colors leading-tight">Le conseil municipal approuve une nouvelle initiative d'énergie verte</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">20 Oct, 2023</p>
+</div>
+</div>
+</div>
+<hr class="border-outline-variant opacity-20"/>
+<!-- News Item 2 -->
+<div class="group cursor-pointer">
+<div class="flex gap-md">
+<div class="w-20 h-20 rounded-lg overflow-hidden shrink-0">
+<img alt="Objets en plastique compressés pour le recyclage" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZLa_3rsUF-iA7LiTuDnt5TmlN4fQaU0XkwOh9yqVgcwkVY_TuESIj_tSXXjFrCRJP5GWVc9D5s2Vo_HCh4dCl3lmvu_NtDJ0M1vwTvaVv_MWlRfbykIgJAyeC4cl-fJaWAzNwWihbFKGvt0eHYioW60SP6UoA8T_9bmrwvdVygEC1rS4Ist-tJnC64klCaKQKmWcpQBaBuLg5JJc8ahR1Tz9wS6blLnGVLjxrfs6nOJD1DN_pMOk"/>
+</div>
+<div class="space-y-1">
+<h4 class="font-body-lg text-body-lg font-bold group-hover:text-primary transition-colors leading-tight">L'efficacité du recyclage atteint un record de 85 % ce trimestre</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">18 Oct, 2023</p>
+</div>
+</div>
+</div>
+<hr class="border-outline-variant opacity-20"/>
+<!-- News Item 3 -->
+<div class="group cursor-pointer">
+<div class="flex gap-md">
+<div class="w-20 h-20 rounded-lg overflow-hidden shrink-0">
+<img alt="Pluie sur une feuille dans un jardin de ville" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9AZ_DasK6VUeecEec0WBemgMcb7QqMp4udpTujS3KxQf1YIlovR6fsXL4_ONr7x6RPZWLCTCC9alBvviQPX_cY0jFgCJcK6A4uAxJ_tFxZB3wJmI7hOt8GtmqMDYenz8yno7cDEQf96m_htnvEwfp_fRdyfHejc5tctriam1svZF97JMxX8KNFJX5G6ZU8JGe97rG16nmLccR9whpDsuiLQrnAnUoj16m0OiAVvVu1nFlF4hiL28"/>
+</div>
+<div class="space-y-1">
+<h4 class="font-body-lg text-body-lg font-bold group-hover:text-primary transition-colors leading-tight">Pluies à venir : Conseils pour l'entretien de votre jardin</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">15 Oct, 2023</p>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full py-md text-primary font-button text-button border border-primary/20 rounded-lg hover:bg-primary/5 transition-colors">
+                        Parcourir les archives
+                    </button>
+</div>
+<!-- Leaderboard / Impact -->
+<div class="bg-primary text-white p-lg rounded-xl space-y-md shadow-lg shadow-primary/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-fixed">military_tech</span>
+<h2 class="font-headline-md text-headline-md">Classement d'impact</h2>
+</div>
+<p class="text-white/80 font-body-md text-body-md">Meilleurs contributeurs de notre communauté ce mois-ci.</p>
+<div class="space-y-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-md">
+<span class="font-bold text-primary-fixed w-4">1</span>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-white/20">
+<img alt="Portrait de Sarah J." class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMeD9zaHe69oziT8FoUrcy5YuNiCwTxj5p4ZvzTDlxdtNpQk9VFIWujL5oSwdKgmn408X_lVkzIzS_x5pD1Lo-RvZsyroSwK7g-SjTFfpN__MrJ-iAKeLHvGK_4wWtQ8I1-7OskJyIWCcjjUUpE4ru34YNX4IW8vWLHMJGd2HqiLlGkLIGmZ-DFn3IY5tCAHuJpnEWQX38sqtujj8PS6NF1mHDn2L6C0Er8-GYsLMNaKkPKZlKH9U"/>
+</div>
+<span class="font-button text-button">Sarah J.</span>
+</div>
+<span class="font-label-sm text-label-sm bg-white/20 px-2 py-1 rounded-full">2.4k pts</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-md">
+<span class="font-bold text-primary-fixed w-4">2</span>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-white/20">
+<img alt="Portrait de Marcus T." class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVh5vHu0f2uyPNC1OktVY3TcPLBkk9SUt8Lv9Ldfb7zzneFbJ_DVfrDr_GmpqZtAVUVLWhdKI8BEXt6pvX6AteFggYIKAJXm-l5aPjHn-54o7YK5i0-Yri4Bh0hfkkIKY9_6TqUrcR_llJ2aw15m4k9u8sUBPOJ6sUCibGK5TT2lhUARggfgMKPwpKpo8GIIkhLyevimAPhbLWYcKKIlJ7fmPgqXWpy3ViDc_PdQDdBz9M20Bj_xE"/>
+</div>
+<span class="font-button text-button">Marcus T.</span>
+</div>
+<span class="font-label-sm text-label-sm bg-white/20 px-2 py-1 rounded-full">2.1k pts</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-md">
+<span class="font-bold text-primary-fixed w-4">3</span>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-white/20">
+<img alt="Portrait d'Elena R." class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOt5lwPvDmK2KLVzIrw3LHSOrQjHFsM43Ka4HxY5Ri-4tYFwkv-P_jV5CNPYL1pMO43fQYJzNpsZSMdcLVEKiUkqQVW4AOJ9razNH6dntSpmDTxXZXO6YTajE8Y5czavy4yolaLP5y_BDMJ-9k0kV5Qd818p40Kij8qqsBfmMS-F7J2hG2cwdiZB69zwQRyhm4UjsgD5TtGHxV_Z5Qf_OPP8sAGrPIt4fb5Ch7KGQLwrgLwbVLlZQ"/>
+</div>
+<span class="font-button text-button">Elena R.</span>
+</div>
+<span class="font-label-sm text-label-sm bg-white/20 px-2 py-1 rounded-full">1.9k pts</span>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full flex justify-around items-center px-4 pt-2 pb-safe bg-surface dark:bg-surface-container z-50 rounded-t-xl shadow-[0px_-2px_8px_rgba(0,0,0,0.05)]">
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-2 py-1">
+<span class="material-symbols-outlined">map</span>
+<span class="font-label-sm text-label-sm-mobile">Carte</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-2 py-1">
+<span class="material-symbols-outlined">delete_sweep</span>
+<span class="font-label-sm text-label-sm-mobile">Déchets</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-2 py-1">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm text-label-sm-mobile">Apprendre</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container dark:bg-on-primary-fixed-variant text-on-primary-container dark:text-primary-fixed rounded-full px-4 py-1 scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined fill-icon">groups</span>
+<span class="font-label-sm text-label-sm-mobile">Portail</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-2 py-1">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm-mobile">Compte</span>
+</button>
+</nav>
+<!-- FAB for adding new post (Desktop context only/visible on mobile scroll) -->
+<button class="fixed bottom-24 md:bottom-8 right-6 w-14 h-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<script>
+        // Micro-interactions for upvoting
+        document.querySelectorAll('button:has(.material-symbols-outlined)').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.querySelector('span').innerText.includes('arrow_drop_up')) {
+                    const span = this.nextElementSibling;
+                    if (span && !isNaN(span.innerText)) {
+                        let count = parseInt(span.innerText);
+                        const isFilled = this.querySelector('span').classList.contains('fill-icon');
+                        if (!isFilled) {
+                            span.innerText = count + 1;
+                            this.querySelector('span').classList.add('fill-icon');
+                            this.classList.add('text-primary');
+                        } else {
+                            span.innerText = count - 1;
+                            this.querySelector('span').classList.remove('fill-icon');
+                            this.classList.remove('text-primary');
+                        }
+                    }
+                }
+            });
+        });
+
+        // Sticky Header behavior
+        let lastScrollTop = 0;
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > 50) {
+                header.classList.add('shadow-md');
+            } else {
+                header.classList.remove('shadow-md');
+            }
+            lastScrollTop = scrollTop;
+        });
+    </script>
+</body></html>

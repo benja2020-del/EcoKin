@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>EcoKin - Explorateur de Carte</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#001a42",
+                    "primary-container": "#10b981",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "surface": "#f9f9ff",
+                    "on-primary-fixed": "#002113",
+                    "inverse-surface": "#2a313d",
+                    "outline": "#6c7a71",
+                    "on-error-container": "#93000a",
+                    "secondary-container": "#2170e4",
+                    "tertiary-fixed": "#ffddb8",
+                    "error-container": "#ffdad6",
+                    "secondary": "#0058be",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed": "#d8e2ff",
+                    "on-background": "#151c27",
+                    "surface-bright": "#f9f9ff",
+                    "surface-container": "#e7eefe",
+                    "inverse-on-surface": "#ebf1ff",
+                    "surface-variant": "#dce2f3",
+                    "surface-dim": "#d3daea",
+                    "primary": "#006c49",
+                    "on-primary-fixed-variant": "#005236",
+                    "inverse-primary": "#4edea3",
+                    "on-surface-variant": "#3c4a42",
+                    "on-primary-container": "#00422b",
+                    "outline-variant": "#bbcabf",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "on-secondary-container": "#fefcff",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-primary": "#ffffff",
+                    "tertiary-container": "#e29100",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-surface": "#151c27",
+                    "background": "#f9f9ff",
+                    "surface-tint": "#006c49",
+                    "surface-container-highest": "#dce2f3",
+                    "primary-fixed": "#6ffbbe",
+                    "surface-container-high": "#e2e8f8",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#855300",
+                    "on-secondary-fixed-variant": "#004395",
+                    "on-tertiary-container": "#523200",
+                    "surface-container-low": "#f0f3ff",
+                    "primary-fixed-dim": "#4edea3",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "gutter-mobile": "12px",
+                    "lg": "24px",
+                    "md": "16px",
+                    "base": "4px",
+                    "xl": "32px",
+                    "sm": "8px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "button": ["Inter"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "button": ["15px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        
+        /* Custom Map Styles */
+        .map-container {
+            height: calc(100vh - 64px - 72px); /* Adjust for Header and Nav height */
+            background: #e5e7eb;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Marker Animation */
+        @keyframes pulse-primary {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .marker-active {
+            animation: pulse-primary 2s infinite ease-in-out;
+        }
+
+        /* Detail Card Transitions */
+        .bottom-sheet {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bottom-sheet.hidden-state {
+            transform: translateY(120%);
+        }
+
+        /* Custom Scrollbar for list */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+    .map-container {
+      height: calc(100vh - 88px);
+      min-height: 420px;
+      background: #e5e7eb;
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+      position: relative;
+      z-index: 0;
+    }
+    .map-overlay {
+      position: absolute;
+      top: 1rem;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-hidden">
+<script src="./config.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../api-client.js"></script>
+<!-- Top App Bar -->
+<header class="bg-surface/80 dark:bg-surface-container-highest/80 backdrop-blur-md shadow-sm dark:shadow-none docked full-width top-0 sticky z-50 flex justify-between items-center px-margin-mobile py-sm w-full">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="eco">eco</span>
+<span>EcoKin</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-container-high/50 transition-colors scale-95 duration-100 ease-in-out">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<main class="relative w-full h-screen">
+<!-- Map View -->
+<div class="map-container w-full h-full bg-[#f0f3f5] relative" id="map-view">
+  <div class="absolute top-4 left-0 right-0 z-50 px-margin-mobile map-overlay">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
+      <div class="relative flex-1">
+        <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+          <span class="material-symbols-outlined text-on-surface-variant">search</span>
+        </div>
+        <input class="w-full pl-12 pr-12 py-3 bg-white shadow-lg border-none rounded-full focus:ring-2 focus:ring-primary text-body-md text-on-surface placeholder:text-outline-variant transition-all" placeholder="Rechercher un lieu..." type="text"/>
+        <button class="absolute inset-y-0 right-3 flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined">my_location</span>
+        </button>
+      </div>
+      
+    </div>
+  </div>
+  <div id="map" class="relative"></div>
+</div>
+<!-- Floating Action Button (FAB) -->
+<button id="openIncidentFormButton" type="button" class="fixed bottom-24 right-4 z-40 w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-on-primary-fixed-variant transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined text-[32px]" data-icon="add">add</span>
+</button>
+<div id="incidentFormOverlay" class="hidden fixed inset-0 z-50 overflow-auto bg-black/40 p-4">
+  <div class="mx-auto w-full max-w-2xl rounded-3xl bg-surface shadow-2xl overflow-hidden max-h-[calc(100vh-4rem)]">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant/30">
+      <div>
+        <p class="text-label-sm font-label-sm uppercase text-on-surface-variant mb-1">Nouveau signalement</p>
+        <h2 class="font-headline-md text-headline-md">Ajouter un incident</h2>
+      </div>
+      <button id="incidentFormCancel" type="button" class="text-on-surface-variant hover:text-primary transition-colors">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <form id="incidentForm" class="space-y-4 px-6 py-5 overflow-y-auto max-h-[calc(100vh-4rem-88px)]">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <label class="space-y-2 text-sm text-on-surface-variant">
+          Titre
+          <input id="incidentTitle" name="title" type="text" required class="w-full rounded-2xl border border-outline-variant px-4 py-3 bg-white text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="Ex: Poubelle débordante" />
+        </label>
+        <label class="space-y-2 text-sm text-on-surface-variant">
+          Type d’incident
+          <select id="incidentType" name="incident_type" required class="w-full rounded-2xl border border-outline-variant px-4 py-3 bg-white text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20">
+            <option value="">Sélectionner</option>
+            <option value="organique">Organique</option>
+            <option value="plastique">Plastique</option>
+            <option value="dechet">Déchet</option>
+            <option value="autre">Autre</option>
+          </select>
+        </label>
+      </div>
+      <label class="space-y-2 text-sm text-on-surface-variant block">
+        Description
+        <textarea id="incidentDescription" name="description" rows="4" class="w-full rounded-2xl border border-outline-variant px-4 py-3 bg-white text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="Ajouter les détails du signalement..."></textarea>
+      </label>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <label class="space-y-2 text-sm text-on-surface-variant">
+          Latitude
+          <input id="incidentLatitude" name="latitude" type="number" step="any" required class="w-full rounded-2xl border border-outline-variant px-4 py-3 bg-white text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="-4.325" />
+        </label>
+        <label class="space-y-2 text-sm text-on-surface-variant">
+          Longitude
+          <input id="incidentLongitude" name="longitude" type="number" step="any" required class="w-full rounded-2xl border border-outline-variant px-4 py-3 bg-white text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="15.322" />
+        </label>
+      </div>
+      <div class="flex items-center justify-between gap-4">
+        <button id="useMapLocationBtn" type="button" class="rounded-2xl bg-secondary-container px-4 py-3 text-secondary hover:bg-secondary/10 transition-colors">Utiliser position de la carte</button>
+        <label class="flex-1 space-y-2 text-sm text-on-surface-variant">
+          Photo
+          <input id="incidentPhoto" name="photo" type="file" accept="image/*" required class="w-full rounded-2xl border border-outline-variant px-4 py-3 bg-white text-on-surface file:rounded-full file:border-0 file:bg-primary file:text-white file:px-4 file:py-2" />
+        </label>
+      </div>
+      <div class="flex flex-col gap-3 pt-2 md:flex-row md:justify-end">
+        <button id="incidentFormClose" type="button" class="w-full rounded-2xl border border-outline-variant px-5 py-3 text-on-surface hover:bg-surface-container-high transition-all md:w-auto">Annuler</button>
+        <button type="submit" class="w-full rounded-2xl bg-primary px-5 py-3 text-white hover:bg-primary-container transition-all md:w-auto">Envoyer le signalement</button>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Bottom Sheet (Details Card) -->
+<div class="bottom-sheet hidden-state fixed bottom-16 left-0 right-0 z-40 bg-surface rounded-t-3xl shadow-[0px_-8px_30px_rgba(0,0,0,0.12)] border-t border-outline-variant/20 max-w-lg mx-auto overflow-hidden" id="details-sheet">
+<!-- Drag Handle -->
+<div class="w-full flex justify-center py-3">
+<div class="w-12 h-1.5 bg-outline-variant/50 rounded-full"></div>
+</div>
+<div class="px-margin-mobile pb-20 pt-2">
+<div class="flex justify-between items-start mb-4">
+<div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-label-sm font-label-sm mb-2" id="cat-badge">
+<span class="material-symbols-outlined text-xs" data-icon="circle" style="font-variation-settings: 'FILL' 1;">circle</span>
+<span id="cat-text">Déchets Organiques</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface" id="report-title">Poubelle qui déborde</h2>
+<p class="text-body-md text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+                            Market Street, Entrée de la Place
+                        </p>
+</div>
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors" onclick="hideDetails()">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="close">close</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Photo -->
+<div class="rounded-xl overflow-hidden h-40 bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="Une photo en gros plan d'une poubelle de rue débordant de déchets organiques." id="report-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB67dhfrAdlm5JqTDUKP5CO4RLswc9g1ETU-suHvalL0Aq9_VD3zOLH2qQYi_bo7HCuPmlhlmEkTa0FNsDchvxUnBcmxRgji0evmnWJJ22KTnavd9r7f1-ebllLJiLuVBtr5gUz3xen_SvPxjRADam8zHXY6KWWNBxgx55HyauM0F12zWf_nTkuiZxMYTcuQMNRWwJaPetQOJSaD907wmfN8tEkfQkCEG-BOSZvZczaJrr2LPH-mCI"/>
+</div>
+<!-- Info List -->
+<div class="flex flex-col justify-between">
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant text-label-sm font-label-sm">STATUT</span>
+<span class="bg-secondary-container/10 text-secondary px-2 py-0.5 rounded-lg text-label-sm font-label-sm border border-secondary/20" id="status-pill">En cours</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant text-label-sm font-label-sm">SIGNALÉ</span>
+<span class="text-on-surface font-body-md">Il y a 2h par citoyen#429</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant text-label-sm font-label-sm">PRIORITÉ</span>
+<span class="text-on-surface font-body-md">Moyenne</span>
+</div>
+</div>
+<button class="w-full bg-primary text-white py-3 rounded-xl font-button text-button mt-4 hover:opacity-90 active:scale-95 transition-all shadow-md">
+                            Contribuer à la résolution
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full flex justify-around items-center px-4 pt-2 pb-safe bg-surface dark:bg-surface-container shadow-[0px_-2px_8px_rgba(0,0,0,0.05)] z-50 rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-on-primary-fixed-variant text-on-primary-container dark:text-primary-fixed rounded-full px-4 py-1 Active: scale-90 transition-transform duration-150" href="../carte_des_signalements/code.html">
+<span class="material-symbols-outlined" data-icon="map" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="font-label-sm text-label-sm-mobile">Carte</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-2 py-1 hover:opacity-80 transition-opacity" href="../gestion_des_d_chets/code.html">
+<span class="material-symbols-outlined" data-icon="delete_sweep">delete_sweep</span>
+<span class="font-label-sm text-label-sm-mobile">Déchets</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-2 py-1 hover:opacity-80 transition-opacity" href="../espace_ducation/code.html">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-label-sm text-label-sm-mobile">Apprendre</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-2 py-1 hover:opacity-80 transition-opacity" href="../portail_collaboratif/code.html">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-label-sm text-label-sm-mobile">Portail</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-2 py-1 hover:opacity-80 transition-opacity" href="../compte/code.html">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm-mobile">Compte</span>
+</a>
+</nav>
+<script>
+        const sheet = document.getElementById('details-sheet');
+        const catBadge = document.getElementById('cat-badge');
+        const catText = document.getElementById('cat-text');
+        const reportTitle = document.getElementById('report-title');
+        const statusPill = document.getElementById('status-pill');
+
+        const fallbackReportData = {
+            organic: {
+                title: "Bac à compost plein",
+                category: "Organique",
+                colorClass: "bg-primary-container/10 text-on-primary-container",
+                status: "En attente d'enquête",
+                statusClass: "bg-error-container/20 text-error border-error/20"
+            },
+            plastic: {
+                title: "Plastiques déposés illégalement",
+                category: "Plastique/Recyclage",
+                colorClass: "bg-secondary-container/10 text-on-secondary-container",
+                status: "Assigné",
+                statusClass: "bg-secondary-container/10 text-secondary border-secondary/20"
+            },
+            waste: {
+                title: "Poubelle publique cassée",
+                category: "Déchets banals",
+                colorClass: "bg-tertiary-container/10 text-on-tertiary-container",
+                status: "Résolu",
+                statusClass: "bg-primary-container/10 text-primary border-primary/20"
+            }
+        };
+
+        let reportData = { ...fallbackReportData };
+        let map;
+        let incidentLayer;
+
+        function initializeMap() {
+            map = L.map('map', { zoomControl: false }).setView([-4.325, 15.322], 12);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19,
+            }).addTo(map);
+
+            incidentLayer = L.layerGroup().addTo(map);
+
+            const icon = L.icon({
+                iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+                shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41],
+            });
+            L.Marker.prototype.options.icon = icon;
+        }
+
+        async function loadIncidentData() {
+            if (!map) initializeMap();
+            incidentLayer.clearLayers();
+
+            try {
+                const data = await window.api.getIncidents();
+                const incidents = Array.isArray(data) ? data : data?.results || [];
+
+                if (incidents.length) {
+                    incidents.forEach((incident) => {
+                        const lat = incident.latitude ?? incident.lat ?? incident.coords?.latitude ?? null;
+                        const lng = incident.longitude ?? incident.lng ?? incident.coords?.longitude ?? null;
+                        if (lat == null || lng == null) return;
+
+                        L.marker([lat, lng])
+                            .addTo(incidentLayer)
+                            .bindPopup(`
+                                <strong>${incident.title || 'Signalement'}</strong><br />
+                                ${incident.description || incident.details || ''}
+                            `);
+                    });
+
+                    const firstCoords = incidents.find((incident) => incident.latitude != null || incident.lat != null || incident.coords?.latitude != null);
+                    if (firstCoords) {
+                        const lat = firstCoords.latitude ?? firstCoords.lat ?? firstCoords.coords?.latitude;
+                        const lng = firstCoords.longitude ?? firstCoords.lng ?? firstCoords.coords?.longitude;
+                        if (lat != null && lng != null) {
+                            map.setView([lat, lng], 12);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.warn('Impossible de charger les incidents depuis l’API Render, utilisation du contenu local.', error);
+                reportData = { ...fallbackReportData };
+            } finally {
+                if (map) {
+                    setTimeout(() => map.invalidateSize(), 300);
+                }
+            }
+        }
+
+        function showDetails(type) {
+            const data = reportData[type] || fallbackReportData[type];
+            catText.innerText = data.category;
+            reportTitle.innerText = data.title;
+            catBadge.className = `inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-label-sm font-label-sm mb-2 ${data.colorClass}`;
+            statusPill.innerText = data.status;
+            statusPill.className = `px-2 py-0.5 rounded-lg text-label-sm font-label-sm border ${data.statusClass}`;
+            
+            sheet.classList.remove('hidden-state');
+        }
+
+        function hideDetails() {
+            sheet.classList.add('hidden-state');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('map-view');
+            const incidentFormOverlay = document.getElementById('incidentFormOverlay');
+            const incidentForm = document.getElementById('incidentForm');
+            const openIncidentFormButton = document.getElementById('openIncidentFormButton');
+            const incidentFormCancel = document.getElementById('incidentFormCancel');
+            const incidentFormClose = document.getElementById('incidentFormClose');
+            const useMapLocationBtn = document.getElementById('useMapLocationBtn');
+            const latitudeInput = document.getElementById('incidentLatitude');
+            const longitudeInput = document.getElementById('incidentLongitude');
+
+            function showIncidentForm() {
+                if (map) {
+                    const center = map.getCenter();
+                    latitudeInput.value = center.lat.toFixed(6);
+                    longitudeInput.value = center.lng.toFixed(6);
+                }
+                incidentFormOverlay.classList.remove('hidden');
+            }
+
+            function hideIncidentForm() {
+                incidentFormOverlay.classList.add('hidden');
+            }
+
+            openIncidentFormButton?.addEventListener('click', showIncidentForm);
+            incidentFormCancel?.addEventListener('click', hideIncidentForm);
+            incidentFormClose?.addEventListener('click', hideIncidentForm);
+            incidentFormOverlay?.addEventListener('click', (event) => {
+                if (event.target === incidentFormOverlay) {
+                    hideIncidentForm();
+                }
+            });
+
+            useMapLocationBtn?.addEventListener('click', () => {
+                if (map) {
+                    const center = map.getCenter();
+                    latitudeInput.value = center.lat.toFixed(6);
+                    longitudeInput.value = center.lng.toFixed(6);
+                }
+            });
+
+            incidentForm?.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const submitButton = incidentForm.querySelector('button[type="submit"]');
+                const originalText = submitButton.innerHTML;
+                submitButton.innerHTML = `<span class="material-symbols-outlined animate-spin">refresh</span>`;
+                submitButton.disabled = true;
+
+                const formData = new FormData(incidentForm);
+                try {
+                    await window.api.createIncident(formData);
+                    alert('Signalement envoyé avec succès.');
+                    incidentForm.reset();
+                    hideIncidentForm();
+                    loadIncidentData();
+                } catch (error) {
+                    const message = error?.response?.detail || error?.message || 'Impossible d’envoyer le signalement.';
+                    alert(message);
+                } finally {
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                }
+            });
+
+            container?.addEventListener('click', (e) => {
+                if (e.target.id === 'map-view' || e.target.parentElement?.id === 'map-view') {
+                    hideDetails();
+                }
+            });
+
+            loadIncidentData();
+        });
+    </script>
+</body></html>
